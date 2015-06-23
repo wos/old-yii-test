@@ -44,13 +44,13 @@ class UsersController extends Controller
 
 	public function actionLogin(){
 		if(!Yii::app()->user->isGuest)
-			$this->redirect($this->createUrl('files/index'));
+			$this->redirect($this->createUrl('files/admin'));
 
         $model=new LoginForm;
 		if(isset($_POST['LoginForm'])){
 			$model->attributes=$_POST['LoginForm'];
 			if($model->validate() && $model->login())
-				$this->redirect($this->createUrl('files/index'));
+				$this->redirect($this->createUrl('files/admin'));
 		}
 		$this->render('login',array('model'=>$model))  ;
 	}

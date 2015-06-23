@@ -62,12 +62,8 @@ class FilesController extends Controller
             $model->file=CUploadedFile::getInstance($model,'file');
             $model->filename = $model->file->getName();
             if($model->save()){
-                // TODO: make 2-directory hierarchy based on file Id
-
-                $path=Yii::getPathOfAlias('application.uploads').DIRECTORY_SEPARATOR.$model->file->getName();
-                $model->file->saveAs($path);
+                $model->upload();
 				Yii::app()->user->setFlash('success',"File successfully uploaded");
-
 			}
         }
         $this->render('create', array('model'=>$model));

@@ -83,7 +83,7 @@ class Files extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('filename',$this->filename,true);
+		$criteria->compare('filename',$this->filename, true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -100,4 +100,40 @@ class Files extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	/**
+     * @return string pth to save file (create if not exist)
+     */
+	private function getFolderPath()
+	{
+		$folder=Yii::getPathOfAlias('application.uploads').DIRECTORY_SEPARATOR;
+
+		$subf = floor($this->id / 1000);
+		$folder .= $subf;
+		if(!is_dir($folder)){
+			mkdir($folder);
+		}
+		return $folder;
+	}
+
+	/**
+	 * save uploaded file
+	 * @return null
+	 */
+	public function upload()
+	{
+		$folder = $this->getFolderPath();
+		$path = $folder . DIRECTORY_SEPARATOR . $this->file->getName();
+		$this->file->saveAs($path);
+	}
+
+
+	protected function beforeDelete()
+    {
+		$file = $this->getFolderPath(). DIRECTORY_SEPARATOR . $this->filename;
+		if (is_file($file)) {
+			unlink($file);
+		}
+		return parent::beforeDelete();
+    }
 }
