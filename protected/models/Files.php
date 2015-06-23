@@ -102,7 +102,7 @@ class Files extends CActiveRecord
 	}
 
 	/**
-     * @return string pth to save file (create if not exist)
+     * @return string path to save file (create if not exist)
      */
 	private function getFolderPath()
 	{
